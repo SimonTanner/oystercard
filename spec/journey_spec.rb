@@ -1,28 +1,14 @@
 require './lib/journey'
+require './lib/oystercard'
 
 describe Journey do
 
   let(:station) { double :station }
-
-  describe '#balance' do
-    it "#balance" do
-      expect(subject.balance).to eq(0)
-    end
-  end
-
-  describe '#top_up' do
-    it "#top_up" do
-      expect{ subject.top_up(5) }.to change{ subject.balance }.by 5
-    end
-
-    it "Raises an error if the balance exceeds 90" do
-      expect { subject.top_up(100) }.to raise_error 'You cannot exceed a balance of 90'
-    end
-  end
-
+  card = Oystercard.new
+  
   describe '#touch_in' do
 
-    before(:example) { subject.top_up(Journey::MinFare) }
+    before(:example) { card.top_up(Journey::MINFARE) }
 
     it 'should let us touch_in a card' do
       is_expected.to respond_to(:touch_in)
@@ -47,7 +33,7 @@ describe Journey do
 
   describe '#touch_out' do
 
-    before(:example) { subject.top_up(1) }
+    before(:example) { card.top_up(1) }
 
     it 'should let us touch_out a card' do
       is_expected.to respond_to(:touch_out)
@@ -59,7 +45,7 @@ describe Journey do
     end
 
     it "should deduct money when a user touches out" do
-      expect { subject.touch_out(station) }.to change{ subject.balance}.by (-Journey::MinFare)
+      expect { subject.touch_out(station) }.to change{ subject.balance}.by (-Journey::MINFARE)
     end
 
     it "should 'forget' the entry station after we touch out" do
@@ -72,7 +58,7 @@ describe Journey do
 
   describe '#in_journey?' do
 
-    before(:example) { subject.top_up(1) }
+    before(:example) { card.top_up(1) }
 
     it "should tell us if we have touched in and touched out" do
       subject.touch_out(station)
@@ -95,7 +81,7 @@ describe Journey do
     let(:entry_station) { double :entry_station }
     let(:exit_station) { double :exit_station }
 
-    before(:example) { subject.top_up(1) }
+    before(:example) { card.top_up(1) }
 
     it "should contain an empty list upon instantiation" do
       expect(subject.journeys).to be_empty

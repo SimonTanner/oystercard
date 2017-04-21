@@ -1,30 +1,27 @@
+require_relative 'oystercard'
 class Journey
 
-  attr_reader :balance, :entry_station, :exit_station, :journeys
+  attr_reader :entry_station, :exit_station, :journeys
 
-  MaxBalance = 90
-  MinBalance = 1
-  MinFare = 1
 
-  def initialize
-    @balance = 0
+  MINBALANCE = 1
+  MINFARE = 1
+
+  def initialize(balance)
     @journeys = []
+    @balance = balance
   end
 
-  def top_up(amount)
-    raise "You cannot exceed a balance of #{MaxBalance}" if @balance + amount > MaxBalance
-    @balance += amount
-  end
 
   def touch_in(entry_station)
-    fail "Your balance is below #{MinBalance} so you cannot travel" if @balance < MinBalance
+    fail "Your balance is below #{MINBALANCE} so you cannot travel" if @balance < MINBALANCE
     @entry_station = entry_station
   end
 
   def touch_out(exit_station)
   	@exit_station = exit_station
   	@journeys << {:entry_station => @entry_station, :exit_station => @exit_station}
-  	deduct(MinFare)
+  	deduct(MINFARE)
   	@entry_station = nil
   end
 
