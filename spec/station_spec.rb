@@ -2,8 +2,6 @@ require "station"
 
 describe Station do
 
-  let(:name) { double(:name)}
-  let(:zone) { double(:zone)}
   let(:station) { Station.new(:name, :zone) }
 
   describe "Station exists" do
