@@ -3,26 +3,22 @@ class Journey
 
   attr_reader :entry_station, :exit_station, :journeys
 
-
-  MINBALANCE = 1
   MINFARE = 1
 
-  def initialize(balance)
+  def initialize
     @journeys = []
-    @balance = balance
   end
 
-
-  def touch_in(entry_station)
-    fail "Your balance is below #{MINBALANCE} so you cannot travel" if @balance < MINBALANCE
-    @entry_station = entry_station
+  def entry_station(entry_station)
+    @journeys << {:entry_station => entry_station}
   end
-
-  def touch_out(exit_station)
-  	@exit_station = exit_station
-  	@journeys << {:entry_station => @entry_station, :exit_station => @exit_station}
-  	deduct(MINFARE)
-  	@entry_station = nil
+  
+  def exit_station(exit_station)
+    @journeys[-1][:exit_station] = exit_station
+  end
+  
+  def calc_fare
+    
   end
 
   def in_journey?
